@@ -1,12 +1,14 @@
 package com.example.jibc5.entity;
 
 import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 
 
 @Entity
 @Table(name = "students")
 public class Student {
+
 
     @Id
     @Column(name = "Id", nullable = false)
@@ -24,15 +26,19 @@ public class Student {
     @Column(name = "Phone")
     private String phone;
 
+//    @Column(name = "Image_Filename")  // Added property for image filename
+//    private String imageFilename;
+
     public Student() {
     }
 
-    public Student(String name, String email, String address, String phone) {
+    public Student(String name, String email, String address, String phone, String imageFilename) {
         super();
         this.name = name;
         this.email = email;
         this.address = address;
         this.phone = phone;
+//        this.imageFilename = imageFilename;
     }
 
     public Long getId() {
@@ -74,4 +80,13 @@ public class Student {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
+    // Getter and setter for imageFilename
+//    public String getImageFilename() {
+//        return imageFilename;
+//    }
+//
+//    public void setImageFilename(String imageFilename) {
+//        this.imageFilename = imageFilename;
+//    }
 }

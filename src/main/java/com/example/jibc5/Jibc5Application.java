@@ -18,6 +18,10 @@ public class Jibc5Application implements CommandLineRunner{
 	@Autowired
 	private StudentRepository studentRepository;
 
+//	@Autowired
+//	private UserRepository userRepository;
+
+
 	@Override
 	public void run(String... args) throws Exception {
 	}
