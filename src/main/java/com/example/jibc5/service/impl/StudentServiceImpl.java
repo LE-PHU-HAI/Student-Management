@@ -1,19 +1,24 @@
 package com.example.jibc5.service.impl;
 
-import java.util.List;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.jibc5.entity.Student;
 import com.example.jibc5.repository.StudentRepository;
 import com.example.jibc5.service.StudentService;
+
+import java.util.List;
+
 @Service
-public class StudentServiceImpl implements StudentService{
+public class StudentServiceImpl implements StudentService {
 
-    private StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
+    @Autowired
     public StudentServiceImpl(StudentRepository studentRepository) {
-        super();
         this.studentRepository = studentRepository;
     }
 
@@ -29,7 +34,7 @@ public class StudentServiceImpl implements StudentService{
 
     @Override
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).get();
+        return studentRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -46,5 +51,10 @@ public class StudentServiceImpl implements StudentService{
     public List<Student> searchStudents(String keyword) {
         return studentRepository.findByNameContainingOrEmailContaining(keyword, keyword);
     }
-}
 
+    @Override
+    public Page<Student> getAllStudentsPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, 5);
+        return studentRepository.findAll(pageable);
+    }
+}

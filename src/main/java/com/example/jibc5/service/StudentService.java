@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.example.jibc5.entity.Student;
 
+import org.springframework.data.domain.Page;
+
 public interface StudentService {
 
     List<Student> getAllStudents();
@@ -17,4 +19,7 @@ public interface StudentService {
     void deleteStudentById(Long id);
 
     List<Student> searchStudents(String keyword);
+
+    Page<Student> getAllStudentsPaginated(int pageNo, int pageSize);
 }
+

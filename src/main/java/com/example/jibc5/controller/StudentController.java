@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -18,16 +21,20 @@ import java.util.List;
 @Controller
 public class StudentController {
 
-    private StudentService studentService;
+    private final StudentService studentService;
 
     public StudentController(StudentService studentService) {
-        super();
         this.studentService = studentService;
     }
 
     @GetMapping("/students")
-    public String listStudents(Model model) {
-        model.addAttribute("students", studentService.getAllStudents());
+    public String listStudents(Model model,
+                               @RequestParam(name = "pageNo",defaultValue = "1") int pageNo,
+                               @RequestParam(defaultValue = "5") int pageSize) {
+        Page<Student> page = studentService.getAllStudentsPaginated(pageNo, pageSize);
+        model.addAttribute("students", page.getContent());
+        model.addAttribute("totalPages", page.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
         return "students";
     }
 
@@ -36,7 +43,6 @@ public class StudentController {
         Student student = new Student();
         model.addAttribute("student", student);
         return "create_student";
-
     }
 
     @PostMapping("/students")
@@ -55,24 +61,16 @@ public class StudentController {
     public String updateStudent(@PathVariable Long id,
                                 @ModelAttribute("student") Student student,
                                 Model model) {
-
-        // get student from database by id
         Student existingStudent = studentService.getStudentById(id);
-        existingStudent.setId(id);
         existingStudent.setName(student.getName());
         existingStudent.setEmail(student.getEmail());
         existingStudent.setAddress(student.getAddress());
         existingStudent.setPhone(student.getPhone());
-
-
-        // save updated student object
         studentService.updateStudent(existingStudent);
         return "redirect:/students";
     }
 
-    // handler method to handle delete student request
-
-    @GetMapping("/students/{id}")
+    @GetMapping("/students/delete/{id}")
     public String deleteStudent(@PathVariable Long id) {
         studentService.deleteStudentById(id);
         return "redirect:/students";
@@ -81,15 +79,10 @@ public class StudentController {
     @GetMapping("/students/search")
     public String searchStudents(@RequestParam(required = false) String keyword, Model model) {
         if (keyword != null && !keyword.trim().isEmpty()) {
-            List<Student> searchResults = studentService.searchStudents(keyword);
-            model.addAttribute("searchResults", searchResults);
+            model.addAttribute("searchResults", studentService.searchStudents(keyword));
         } else {
-            // Không có từ khóa hoặc từ khóa trống, không thực hiện tìm kiếm
             model.addAttribute("searchResults", Collections.emptyList());
         }
         return "searchResults";
     }
-
-
-
 }

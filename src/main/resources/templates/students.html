@@ -8,7 +8,6 @@
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-warning navbar-warning">
@@ -24,10 +23,7 @@
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav">
             <li class="nav-item">
-
-            </li>
-            <li class="nav-item">
-
+                <!-- Các liên kết navbar khác -->
             </li>
         </ul>
     </div>
@@ -39,9 +35,8 @@
     </div>
 
     <div class="container d-flex justify-content-between">
-
         <!-- Nút thêm học sinh -->
-        <div class="row ">
+        <div class="row">
             <div class="col-lg-2">
                 <a th:href="@{/students/new}" class="btn btn-primary btn-sm mb-3">Add Student</a>
             </div>
@@ -58,7 +53,6 @@
                 <button type="button" class="btn btn-primary btn-block" onclick="submitForm()">Search</button>
             </div>
         </div>
-
     </div>
 
     <!-- Bảng hiển thị danh sách học sinh -->
@@ -92,8 +86,33 @@
             <td colspan="6">No students found</td>
         </tr>
         </tbody>
-
     </table>
+
+    <!-- Phân trang -->
+    <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin justify-content-center">
+            <li class="page-item">
+                <a class="page-link"
+                   th:if="${currentPage > 1}"
+                   th:href="@{'?pageNo='+${currentPage-1}}"> < </a>
+            </li>
+
+            <li th:each="i:${#numbers.sequence(1,totalPages)}"
+                th:classappend="${currentPage == i ? 'active' : '' }"
+
+                class="page-item">
+                <a th:href="@{'?pageNo='+${i}}"
+                   class="page-link" href="#" th:text="${i}"></a>
+            </li>
+
+            <li class="page-item">
+                <a class="page-link"
+                   th:if="${currentPage < totalPages}"
+                   th:href="@{'?pageNo='+${currentPage + 1}}"> > </a>
+            </li>
+        </ul>
+    </div>
+
 </div>
 
 <script>
@@ -101,49 +120,35 @@
         document.getElementById("searchForm").submit();
     }
 
-
+    // Xử lý xác nhận xóa sinh viên
     var btnDeleteList = document.querySelectorAll('.btn-delete');
 
-// Lặp qua từng phần tử để thêm sự kiện
-btnDeleteList.forEach(function(btnDelete) {
-    btnDelete.addEventListener('click', function(event) {
-        // Sử dụng biến flag để theo dõi xác nhận của người dùng
-        var userConfirmed = false;
+    btnDeleteList.forEach(function(btnDelete) {
+        btnDelete.addEventListener('click', function(event) {
+            var userConfirmed = false;
 
-        // Sử dụng SweetAlert thay vì hộp thoại xác nhận mặc định
-        swal({
-            title: "Do you want to delete?",
-            icon: "warning",
-            buttons: ["Cancel", "OK"],
-            dangerMode: true,
-        })
-        .then((userConfirmation) => {
-            userConfirmed = userConfirmation; // Lưu trạng thái xác nhận của người dùng
+            swal({
+                title: "Do you want to delete?",
+                icon: "warning",
+                buttons: ["Cancel", "OK"],
+                dangerMode: true,
+            })
+            .then((userConfirmation) => {
+                userConfirmed = userConfirmation;
 
-            if (userConfirmed) {
-                // Người dùng nhấp OK
-                var studentId = this.getAttribute('href').match(/\/students\/(\d+)/)[1];
+                if (userConfirmed) {
+                    var studentId = this.getAttribute('href').match(/\/students\/(\d+)/)[1];
+                    window.location.href = '/students/delete/' + studentId;
+                } else {
+                    event.preventDefault();
+                }
+            });
 
-                // Chuyển hướng đến URL xóa với ID sinh viên
-                window.location.href = '/students/' + studentId;
-            } else {
-                // Người dùng nhấp Cancel
-                //alert('Canceled deletion.')
-                // Ngăn chặn hành vi mặc định của sự kiện click
+            if (!userConfirmed) {
                 event.preventDefault();
             }
         });
-
-        // Ngăn chặn hành vi mặc định của sự kiện click nếu người dùng chưa xác nhận
-        if (!userConfirmed) {
-            event.preventDefault();
-        }
     });
-});
-
-
-
 </script>
-
 </body>
 </html>
