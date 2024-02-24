@@ -11,34 +11,33 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-warning navbar-warning">
-    <!-- Brand -->
-    <a class="navbar-brand" href="#">Student Management</a>
+    <div>
+        <a class="navbar-brand" data-lang="student" href="#">Student Management</a>
+        <a class="navbar-brand" data-lang="teacher" th:href="@{/users}">Teacher Management</a>
+    </div>
 
-    <!-- Toggler/collapsible Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <!-- Các liên kết navbar khác -->
-            </li>
-        </ul>
+    <div class="ml-auto">
+        <span th:if="${name != null}" th:text="'Welcome, ' + ${name}"></span>
+        <button id="btn-lang-en"
+                class="btn btn-info" onclick="changeLanguage('en')">English</button>
+        <button id="btn-lang-ja"
+                class="btn btn-info" onclick="changeLanguage('ja')">日本語</button>
+        <a th:href="@{/logout}" data-lang="logout-btn" class="btn btn-danger">Log out</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="row">
-        <h1>List Students</h1>
+        <h1 data-lang="List Students">List Students</h1>
     </div>
 
     <div class="container d-flex justify-content-between">
         <!-- Nút thêm học sinh -->
         <div class="row">
             <div class="col-lg-2">
-                <a th:href="@{/students/new}" class="btn btn-primary btn-sm mb-3">Add Student</a>
+                <a th:href="@{/students/new}"
+                   data-lang="Add Student"
+                   class="btn btn-primary btn-sm mb-3">Add Student</a>
             </div>
         </div>
 
@@ -46,11 +45,15 @@
         <div class="row">
             <div class="col-lg-8">
                 <form th:action="@{/students/search}" method="get" id="searchForm">
-                    <input type="text" name="keyword" class="form-control" placeholder="Enter keyword"/>
+                    <input type="text" name="keyword" class="form-control"
+                           placeholder="Enter keyword"/>
                 </form>
             </div>
             <div class="col-lg-4">
-                <button type="button" class="btn btn-primary btn-block" onclick="submitForm()">Search</button>
+                <button type="button"
+                        data-lang="Search"
+                        class="btn btn-primary btn-block"
+                        onclick="submitForm()">Search</button>
             </div>
         </div>
     </div>
@@ -59,12 +62,12 @@
     <table class="table table-striped table-bordered">
         <thead class="table-warning">
         <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Address</th>
-            <th>Phone</th>
-            <th>Actions</th>
+            <th data-lang="Id">Id</th>
+            <th data-lang="Name">Name</th>
+            <th data-lang="Email">Email</th>
+            <th data-lang="Address">Address</th>
+            <th data-lang="Phone">Phone</th>
+            <th data-lang="Actions">Actions</th>
         </tr>
         </thead>
 
@@ -77,13 +80,17 @@
             <td th:text="${student.address}"></td>
             <td th:text="${student.phone}"></td>
             <td>
-                <a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn btn-primary">Update</a>
-                <a th:href="@{/students/{id}(id=${student.id})}" class="btn btn-danger btn-delete">Delete</a>
+                <a th:href="@{/students/edit/{id}(id=${student.id})}"
+                   data-lang="Update"
+                   class="btn btn-primary">Update</a>
+                <a th:href="@{/students/{id}(id=${student.id})}"
+                   data-lang="Delete"
+                   class="btn btn-danger btn-delete">Delete</a>
             </td>
         </tr>
         <!-- Hiển thị thông báo nếu danh sách rỗng -->
         <tr th:if="${#lists.isEmpty(students)}">
-            <td colspan="6">No students found</td>
+            <td colspan="6" data-lang="noti">No students found</td>
         </tr>
         </tbody>
     </table>
@@ -115,6 +122,8 @@
 
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/script.js"></script>
 <script>
     function submitForm() {
         document.getElementById("searchForm").submit();
@@ -148,6 +157,17 @@
                 event.preventDefault();
             }
         });
+    });
+
+
+     // Thêm sự kiện click cho nút chuyển đổi ngôn ngữ tiếng Anh
+    document.getElementById('btn-lang-en').addEventListener('click', function() {
+        changeLanguage('en');
+    });
+
+    // Thêm sự kiện click cho nút chuyển đổi ngôn ngữ tiếng Nhật
+    document.getElementById('btn-lang-ja').addEventListener('click', function() {
+        changeLanguage('ja');
     });
 </script>
 </body>

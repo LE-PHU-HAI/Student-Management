@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Management</title>
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+          crossorigin="anonymous">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-warning navbar-warning">
+    <div>
+        <a class="navbar-brand" data-lang="student" th:href="@{/students}">Student Management</a>
+        <a class="navbar-brand" data-lang="teacher" href="#">Teacher Management</a>
+    </div>
+
+    <div class="ml-auto">
+        <span th:if="${name != null}" th:text="'Welcome, ' + ${name}"></span>
+        <button id="btn-lang-en" class="btn btn-info" onclick="changeLanguage('en')">English</button>
+        <button id="btn-lang-ja" class="btn btn-info" onclick="changeLanguage('ja')">日本語</button>
+        <a th:href="@{/logout}" data-lang="logout-btn" class="btn btn-danger">Log out</a>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center" data-lang="List Teachers">List Teachers</h1>
+            <div class="mx-auto" style="max-width: 800px;">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-warning">
+                    <tr>
+                        <th data-lang="Id">Id</th>
+                        <th data-lang="Name">Name</th>
+                        <th data-lang="Email">Email</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.id}"></td>
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Phân trang -->
+<div class="box-footer clearfix">
+    <ul class="pagination pagination-sm no-margin justify-content-center">
+        <li class="page-item">
+            <a class="page-link"
+               th:if="${currentPage > 1}"
+               th:href="@{'?pageNo='+${currentPage-1}}"> < </a>
+        </li>
+
+        <li th:each="i:${#numbers.sequence(1,totalPages)}"
+            th:classappend="${currentPage == i ? 'active' : '' }"
+
+            class="page-item">
+            <a th:href="@{'?pageNo='+${i}}"
+               class="page-link" href="#" th:text="${i}"></a>
+        </li>
+
+        <li class="page-item">
+            <a class="page-link"
+               th:if="${currentPage < totalPages}"
+               th:href="@{'?pageNo='+${currentPage + 1}}"> > </a>
+        </li>
+    </ul>
+</div>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="/js/script.js"></script>
+</body>
+</html>

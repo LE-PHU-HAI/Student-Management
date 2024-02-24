@@ -1,23 +1,15 @@
 package com.example.jibc5.service;
 
+import com.example.jibc5.entity.Student;
 import com.example.jibc5.entity.User;
 import com.example.jibc5.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-@Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
+public interface UserService {
 
-    public boolean checkPasswordUser(String email, String password) {
-        User user = userRepository.findByEmailAndPassword(email, password);
-        return user != null;
-    }
+    boolean checkPasswordUser(String email, String password);
 
-
-    void save(User user) {
-        // Các logic lưu user
-    }
-
+    Page<User> getAllUsersPaginated(int pageNo, int pageSize);
 }

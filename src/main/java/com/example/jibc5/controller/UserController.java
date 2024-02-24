@@ -1,25 +1,40 @@
 package com.example.jibc5.controller;
 
+import com.example.jibc5.entity.Student;
 import com.example.jibc5.entity.User;
 import com.example.jibc5.repository.UserRepository;
 import com.example.jibc5.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import java.util.List;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 
+import org.springframework.data.domain.Page;
 
 @Controller
 public class UserController {
 
+    private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping("/users")
+    public String showUsers(Model model,
+                            @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                            @RequestParam(defaultValue = "5") int pageSize) {
+        Page<User> usersPage = userService.getAllUsersPaginated(pageNo, pageSize);
+        model.addAttribute("users", usersPage.getContent());
+        model.addAttribute("totalPages", usersPage.getTotalPages());
+        model.addAttribute("currentPage", usersPage.getNumber() + 1);
+        return "users";
+    }
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model) {
@@ -34,6 +49,11 @@ public class UserController {
         }
         userRepository.save(user);
         return "redirect:/login?success";
+    }
+
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/login";
     }
 
     @GetMapping("/login")
@@ -53,7 +73,9 @@ public class UserController {
         } else if (!existingUser.getPassword().equals(user.getPassword())) {
             return "redirect:/login?passwordError=Incorrect password!";
         } else {
+            model.addAttribute("name", existingUser.getName()); // Thêm thuộc tính "name" vào model
             return "redirect:/students";
+
         }
     }
 }

@@ -1,0 +1,12 @@
+{
+  "en": {
+    "student": "Student Management",
+    "teacher": "Teacher Management",
+    "logout-btn": "Log out",
+  },
+  "ja": {
+    "student": "学生管理",
+    "teacher": "教師の管理",
+    "logout-btn": "ログアウト"
+  }
+}
