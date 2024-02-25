@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Search Results</title>
+    <title data-lang="student">Student Management</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -11,40 +11,36 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-md bg-warning navbar-warning">
-    <!-- Brand -->
-<!--    <a class="navbar-brand" href="#">Student Management System</a>-->
+    <div>
+        <a class="navbar-brand" data-lang="student" th:href="@{/students}">Student Management</a>
+        <a class="navbar-brand" data-lang="teacher" th:href="@{/users}">Teacher Management</a>
+    </div>
 
-    <!-- Toggler/collapsible Button -->
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#collapsibleNavbar">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <!-- Navbar links -->
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/students}">Student Management</a>
-            </li>
-        </ul>
+    <div class="ml-auto">
+        <span th:if="${name != null}" th:text="'Welcome, ' + ${name}"></span>
+        <button id="btn-lang-en"
+                class="btn btn-info" onclick="changeLanguage('en')">English</button>
+        <button id="btn-lang-ja"
+                class="btn btn-info" onclick="changeLanguage('ja')">日本語</button>
+        <a th:href="@{/logout}" data-lang="logout-btn" class="btn btn-danger">Log out</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="row">
-        <h1> Search Results </h1>
+        <h1 data-lang="Search Results"> Search Results </h1>
     </div>
 
     <!-- Hiển thị kết quả tìm kiếm -->
     <table class="table table-striped table-bordered">
         <thead class="table-warning">
         <tr>
-            <th> Id</th>
-            <th> Name</th>
-            <th> Email </th>
-            <th> Address </th>
-            <th> Phone </th>
-            <th> Actions </th>
+            <th data-lang="Id">Id</th>
+            <th data-lang="Name">Name</th>
+            <th data-lang="Email">Email</th>
+            <th data-lang="Address">Address</th>
+            <th data-lang="Phone">Phone</th>
+            <th data-lang="Actions">Actions</th>
         </tr>
         </thead>
 
@@ -57,16 +53,19 @@
             <td th:text="${student.address}"></td>
             <td th:text="${student.phone}"></td>
             <td>
-                <a th:href="@{/students/edit/{id}(id=${student.id})}" class="btn btn-primary">Update</a>
-                <a th:href="@{/students/{id}(id=${student.id})}" class="btn btn-danger btn-delete">Delete</a>
+                <a th:href="@{/students/edit/{id}(id=${student.id})}"
+                   data-lang="Update"
+                   class="btn btn-primary">Update</a>
+                <a th:href="@{/students/{id}(id=${student.id})}"
+                   data-lang="Delete"
+                   class="btn btn-danger btn-delete">Delete</a>
             </td>
         </tr>
         </tbody>
     </table>
 
-    <!-- Hiển thị thông báo nếu không có kết quả tìm kiếm -->
     <div th:if="${#lists.isEmpty(searchResults)}">
-        <p>No results found.</p>
+        <p data-lang="noti">No results found.</p>
     </div>
 </div>
 

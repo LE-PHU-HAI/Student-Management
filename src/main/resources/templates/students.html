@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Student Management</title>
+    <title data-lang="student">Student Management</title>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -45,7 +45,10 @@
         <div class="row">
             <div class="col-lg-8">
                 <form th:action="@{/students/search}" method="get" id="searchForm">
-                    <input type="text" name="keyword" class="form-control"
+                    <input type="text"
+                           data-lang="Enter keyword"
+                           name="keyword"
+                           class="form-control"
                            placeholder="Enter keyword"/>
                 </form>
             </div>
@@ -125,50 +128,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="/js/script.js"></script>
 <script>
-    function submitForm() {
-        document.getElementById("searchForm").submit();
-    }
 
-    // Xử lý xác nhận xóa sinh viên
-    var btnDeleteList = document.querySelectorAll('.btn-delete');
-
-    btnDeleteList.forEach(function(btnDelete) {
-        btnDelete.addEventListener('click', function(event) {
-            var userConfirmed = false;
-
-            swal({
-                title: "Do you want to delete?",
-                icon: "warning",
-                buttons: ["Cancel", "OK"],
-                dangerMode: true,
-            })
-            .then((userConfirmation) => {
-                userConfirmed = userConfirmation;
-
-                if (userConfirmed) {
-                    var studentId = this.getAttribute('href').match(/\/students\/(\d+)/)[1];
-                    window.location.href = '/students/delete/' + studentId;
-                } else {
-                    event.preventDefault();
-                }
-            });
-
-            if (!userConfirmed) {
-                event.preventDefault();
-            }
-        });
-    });
-
-
-     // Thêm sự kiện click cho nút chuyển đổi ngôn ngữ tiếng Anh
-    document.getElementById('btn-lang-en').addEventListener('click', function() {
-        changeLanguage('en');
-    });
-
-    // Thêm sự kiện click cho nút chuyển đổi ngôn ngữ tiếng Nhật
-    document.getElementById('btn-lang-ja').addEventListener('click', function() {
-        changeLanguage('ja');
-    });
 </script>
 </body>
 </html>
